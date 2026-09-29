@@ -18,7 +18,14 @@ import {
   Filter,
   Package,
   AlertCircle,
-  XCircle
+  XCircle,
+  Droplets,
+  CloudRain,
+  Sun,
+  Sliders,
+  Calculator,
+  Copy,
+  CheckCheck
 } from 'lucide-react';
 
 // Generates SVG leaf illustrations as Data URLs for sample testing
@@ -798,6 +805,356 @@ function analyzeImageWithCV(imageSrc, cropHint, fileName) {
   });
 }
 
+// =========================================================================
+// PESTICIDE DOSAGE & WEATHER-ADJUSTED SPRAY CALCULATOR ENGINE
+// =========================================================================
+function getPesticidePrescription(diagnosis) {
+  const cLower = (diagnosis?.crop || 'Rice').toLowerCase();
+  const dLower = (diagnosis?.condition || diagnosis?.disease || 'Leaf Blast').toLowerCase();
+  const severity = diagnosis?.severity || 'Moderate';
+  const isHealthy = severity === 'Healthy' || dLower.includes('healthy') || dLower.includes('no disease');
+
+  if (isHealthy) {
+    return {
+      isHealthy: true,
+      category: 'Healthy Crop (No Disease)',
+      pesticideName: 'None (Zero Chemical Pesticide Required)',
+      chemicalName: 'No Chemical Treatment Required',
+      formulation: 'Safe Organic Preventive Tonic (Optional)',
+      activeIngredient: 'None (Zero Chemical Residues)',
+      unitType: 'liquid',
+      dosePerAcre: 0,
+      doseUnit: 'ml',
+      waterPerAcreLiters: 0,
+      costPerUnitEst: 0,
+      sprayTankDose: '0 per tank',
+      organicAlternative: 'Panchagavya (3% foliar spray) or Azospirillum (500 g/acre)',
+      advisoryNote: 'Crop foliage displays vigorous photosynthesis with zero pathogenic necrosis. Zero synthetic pesticides needed.',
+      safetyIntervalDays: 0,
+    };
+  }
+
+  // 1. Rice Diseases
+  if (cLower.includes('rice') || cLower.includes('paddy')) {
+    if (dLower.includes('blast') || dLower.includes('pyricularia')) {
+      return {
+        isHealthy: false,
+        category: 'Rice Leaf Blast',
+        pesticideName: 'Tricyclazole 75% WP',
+        chemicalName: 'Tricyclazole 75% WP (Baan / Beam)',
+        formulation: 'Wettable Powder (WP)',
+        activeIngredient: 'Tricyclazole 75% w/w',
+        unitType: 'powder',
+        dosePerAcre: 120, // 120 grams per acre
+        doseUnit: 'g',
+        waterPerAcreLiters: 200,
+        costPerUnitEst: 3.2,
+        sprayTankDose: '12 g per 20L tank (9.6 g per 16L tank)',
+        organicAlternative: 'Pseudomonas fluorescens (TNAU strain) @ 1.0 kg/acre with 1% jaggery sticker',
+        advisoryNote: 'Apply foliar spray during early morning or late afternoon. Suspend top-dressing of urea nitrogen.',
+        safetyIntervalDays: 14,
+      };
+    }
+    if (dLower.includes('blight') || dLower.includes('bacterial') || dLower.includes('xanthomonas') || dLower.includes('blb')) {
+      return {
+        isHealthy: false,
+        category: 'Bacterial Leaf Blight (BLB)',
+        pesticideName: 'Copper Hydroxide 77% WP + Streptocycline',
+        chemicalName: 'Streptocycline (18g) + Copper Oxychloride 50% WP (500g)',
+        formulation: 'Bactericide + Protective Fungicide Powder',
+        activeIngredient: 'Streptomycin Sulphate 90% + Copper Oxychloride 50%',
+        unitType: 'powder',
+        dosePerAcre: 500,
+        doseUnit: 'g',
+        waterPerAcreLiters: 200,
+        costPerUnitEst: 0.9,
+        sprayTankDose: '50 g COC + 1.8 g Streptocycline per 20L tank',
+        organicAlternative: 'Fresh cow dung slurry extract 20% filtered + Pseudomonas fluorescens @ 1 kg/acre',
+        advisoryNote: 'Drain stagnant field water for 3-4 days. Avoid overhead irrigation to halt bacterial motility.',
+        safetyIntervalDays: 15,
+      };
+    }
+    if (dLower.includes('sheath') || dLower.includes('rhizoctonia')) {
+      return {
+        isHealthy: false,
+        category: 'Rice Sheath Blight',
+        pesticideName: 'Hexaconazole 5% EC',
+        chemicalName: 'Hexaconazole 5% EC (Contaf)',
+        formulation: 'Emulsifiable Concentrate (EC)',
+        activeIngredient: 'Hexaconazole 5%',
+        unitType: 'liquid',
+        dosePerAcre: 400,
+        doseUnit: 'ml',
+        waterPerAcreLiters: 200,
+        costPerUnitEst: 0.85,
+        sprayTankDose: '40 ml per 20L tank',
+        organicAlternative: 'Trichoderma harzianum @ 1.0 kg/acre foliar spray',
+        advisoryNote: 'Direct spray toward lower stem and leaf sheaths where lesions congregate.',
+        safetyIntervalDays: 21,
+      };
+    }
+    if (dLower.includes('bollworm') || dLower.includes('stem borer') || dLower.includes('borer') || dLower.includes('bph')) {
+      return {
+        isHealthy: false,
+        category: 'Stem Borer / Hopper Infestation',
+        pesticideName: 'Chlorantraniliprole 18.5% SC',
+        chemicalName: 'Chlorantraniliprole 18.5% SC (Coragen)',
+        formulation: 'Suspension Concentrate (SC)',
+        activeIngredient: 'Chlorantraniliprole 18.5%',
+        unitType: 'liquid',
+        dosePerAcre: 60,
+        doseUnit: 'ml',
+        waterPerAcreLiters: 200,
+        costPerUnitEst: 15.0,
+        sprayTankDose: '6 ml per 20L tank (4.8 ml per 16L tank)',
+        organicAlternative: 'Neem Oil (Azadirachtin 10,000 ppm) @ 500 ml/acre + pheromone traps',
+        advisoryNote: 'Provides translaminar protection against hidden boring caterpillars in stem nodes.',
+        safetyIntervalDays: 14,
+      };
+    }
+  }
+
+  // 2. Cotton
+  if (cLower.includes('cotton')) {
+    if (dLower.includes('bollworm') || dLower.includes('helicoverpa') || dLower.includes('caterpillar') || dLower.includes('pest')) {
+      return {
+        isHealthy: false,
+        category: 'American Bollworm Infestation',
+        pesticideName: 'Emamectin Benzoate 5% SG',
+        chemicalName: 'Emamectin Benzoate 5% SG (Proclaim)',
+        formulation: 'Soluble Granules (SG)',
+        activeIngredient: 'Emamectin Benzoate 5% w/w',
+        unitType: 'powder',
+        dosePerAcre: 88,
+        doseUnit: 'g',
+        waterPerAcreLiters: 200,
+        costPerUnitEst: 4.8,
+        sprayTankDose: '8.8 g per 20L tank (7.0 g per 16L tank)',
+        organicAlternative: 'Neem Seed Kernel Extract 5% (NSKE) + Helicoverpa pheromone traps (5/acre)',
+        advisoryNote: 'Direct spray at squares, young bolls, and flower buds where young larvae bore.',
+        safetyIntervalDays: 14,
+      };
+    }
+  }
+
+  // 3. Tomato
+  if (cLower.includes('tomato')) {
+    if (dLower.includes('early blight') || dLower.includes('alternaria') || dLower.includes('leaf spot')) {
+      return {
+        isHealthy: false,
+        category: 'Tomato Early Blight',
+        pesticideName: 'Mancozeb 75% WP',
+        chemicalName: 'Mancozeb 75% WP (Dithane M-45)',
+        formulation: 'Wettable Powder (WP)',
+        activeIngredient: 'Mancozeb 75%',
+        unitType: 'powder',
+        dosePerAcre: 600,
+        doseUnit: 'g',
+        waterPerAcreLiters: 200,
+        costPerUnitEst: 0.65,
+        sprayTankDose: '60 g per 20L tank (48 g per 16L tank)',
+        organicAlternative: 'Bacillus subtilis bio-fungicide @ 500 g/acre or Copper Hydroxide 50% WP @ 400 g/acre',
+        advisoryNote: 'Prune affected lower leaves touching soil before spraying to stop spore splash-back.',
+        safetyIntervalDays: 7,
+      };
+    }
+    if (dLower.includes('late blight') || dLower.includes('phytophthora')) {
+      return {
+        isHealthy: false,
+        category: 'Tomato Late Blight',
+        pesticideName: 'Cymoxanil 8% + Mancozeb 64% WP',
+        chemicalName: 'Cymoxanil 8% + Mancozeb 64% WP (Curzate)',
+        formulation: 'Wettable Powder (WP)',
+        activeIngredient: 'Cymoxanil 8% + Mancozeb 64%',
+        unitType: 'powder',
+        dosePerAcre: 600,
+        doseUnit: 'g',
+        waterPerAcreLiters: 200,
+        costPerUnitEst: 1.1,
+        sprayTankDose: '60 g per 20L tank',
+        organicAlternative: 'Bordeaux Mixture 1% foliar spray',
+        advisoryNote: 'Curative systemic action prevents rapid defoliation during cold, humid spells.',
+        safetyIntervalDays: 7,
+      };
+    }
+  }
+
+  // 4. Potato
+  if (cLower.includes('potato')) {
+    return {
+      isHealthy: false,
+      category: 'Potato Late Blight',
+      pesticideName: 'Metalaxyl 8% + Mancozeb 64% WP',
+      chemicalName: 'Metalaxyl 8% + Mancozeb 64% WP (Ridomil Gold)',
+      formulation: 'Wettable Powder (WP)',
+      activeIngredient: 'Metalaxyl 8% + Mancozeb 64%',
+      unitType: 'powder',
+      dosePerAcre: 600,
+      doseUnit: 'g',
+      waterPerAcreLiters: 200,
+      costPerUnitEst: 1.25,
+      sprayTankDose: '60 g per 20L tank',
+      organicAlternative: 'Trichoderma harzianum @ 1 kg/acre foliar spray',
+      advisoryNote: 'Thorough coverage on lower foliage surface is critical to arrest late blight sporulation.',
+      safetyIntervalDays: 14,
+    };
+  }
+
+  // 5. Banana
+  if (cLower.includes('banana')) {
+    return {
+      isHealthy: false,
+      category: 'Banana Yellow Sigatoka',
+      pesticideName: 'Propiconazole 25% EC',
+      chemicalName: 'Propiconazole 25% EC (Tilt) + Mineral Spray Oil',
+      formulation: 'Emulsifiable Concentrate (EC)',
+      activeIngredient: 'Propiconazole 25%',
+      unitType: 'liquid',
+      dosePerAcre: 200,
+      doseUnit: 'ml',
+      waterPerAcreLiters: 250,
+      costPerUnitEst: 1.9,
+      sprayTankDose: '16 ml per 20L tank + 80 ml mineral oil',
+      organicAlternative: 'Trichoderma viride 1.0 kg/acre + 1% petroleum spray oil emulsified',
+      advisoryNote: 'Cut and burn heavily dried leaves (stage 4-5) before foliar application.',
+      safetyIntervalDays: 28,
+    };
+  }
+
+  // 6. Maize
+  if (cLower.includes('maize') || cLower.includes('corn')) {
+    return {
+      isHealthy: false,
+      category: 'Maize Common Rust',
+      pesticideName: 'Azoxystrobin 18.2% + Difenoconazole 11.4% SC',
+      chemicalName: 'Azoxystrobin 18.2% + Difenoconazole 11.4% SC (Amistar Top)',
+      formulation: 'Suspension Concentrate (SC)',
+      activeIngredient: 'Azoxystrobin + Difenoconazole',
+      unitType: 'liquid',
+      dosePerAcre: 200,
+      doseUnit: 'ml',
+      waterPerAcreLiters: 180,
+      costPerUnitEst: 4.2,
+      sprayTankDose: '22 ml per 20L tank',
+      organicAlternative: 'Pseudomonas fluorescens 1 kg/acre + Neem Oil 2.5 ml/L',
+      advisoryNote: 'Spray when brown rust pustules appear on lower leaves before silking stage.',
+      safetyIntervalDays: 21,
+    };
+  }
+
+  // 7. General Fallbacks
+  if (dLower.includes('bacteri')) {
+    return {
+      isHealthy: false,
+      category: 'Bacterial Foliar Disease',
+      pesticideName: 'Copper Oxychloride 50% WP + Streptocycline',
+      chemicalName: 'Copper Oxychloride 50% WP (Blitox) @ 500g/acre',
+      formulation: 'Wettable Powder (WP)',
+      activeIngredient: 'Copper Oxychloride 50%',
+      unitType: 'powder',
+      dosePerAcre: 500,
+      doseUnit: 'g',
+      waterPerAcreLiters: 200,
+      costPerUnitEst: 0.8,
+      sprayTankDose: '50 g per 20L tank',
+      organicAlternative: 'Cow urine 10% foliar spray + Pseudomonas fluorescens @ 1 kg/acre',
+      advisoryNote: 'Protective broad-spectrum copper bactericide. Apply with hollow-cone nozzle.',
+      safetyIntervalDays: 14,
+    };
+  }
+
+  if (dLower.includes('pest') || dLower.includes('worm') || dLower.includes('borer') || dLower.includes('caterpillar') || dLower.includes('aphid') || dLower.includes('mite')) {
+    return {
+      isHealthy: false,
+      category: 'Insect / Pest Infestation',
+      pesticideName: 'Chlorantraniliprole 18.5% SC',
+      chemicalName: 'Chlorantraniliprole 18.5% SC (Coragen)',
+      formulation: 'Suspension Concentrate (SC)',
+      activeIngredient: 'Chlorantraniliprole 18.5%',
+      unitType: 'liquid',
+      dosePerAcre: 60,
+      doseUnit: 'ml',
+      waterPerAcreLiters: 200,
+      costPerUnitEst: 15.0,
+      sprayTankDose: '6 ml per 20L tank',
+      organicAlternative: 'Neem Oil (Azadirachtin 10,000 ppm) @ 500 ml/acre',
+      advisoryNote: 'Provides extended residual control of chewing pests while safe for beneficial pollinators.',
+      safetyIntervalDays: 14,
+    };
+  }
+
+  // Default Fungal
+  return {
+    isHealthy: false,
+    category: 'Fungal Leaf Spot / Blight',
+    pesticideName: 'Carbendazim 12% + Mancozeb 63% WP',
+    chemicalName: 'Carbendazim 12% + Mancozeb 63% WP (Saaf / Companion)',
+    formulation: 'Wettable Powder (WP)',
+    activeIngredient: 'Carbendazim 12% + Mancozeb 63%',
+    unitType: 'powder',
+    dosePerAcre: 500,
+    doseUnit: 'g',
+    waterPerAcreLiters: 200,
+    costPerUnitEst: 0.9,
+    sprayTankDose: '50 g per 20L tank',
+    organicAlternative: 'Trichoderma viride @ 1 kg/acre + 1% jaggery sticker',
+    advisoryNote: 'Dual-action systemic and contact fungicide for broad foliar disease suppression.',
+    safetyIntervalDays: 14,
+  };
+}
+
+function getRainfallImpact(rainfallMm) {
+  if (rainfallMm === 0) {
+    return {
+      level: 'Dry / Zero Rain (0 mm)',
+      status: 'Optimal',
+      badgeColor: '#16A34A',
+      badgeBg: '#DCFCE7',
+      washOffRisk: 'Zero (0%)',
+      advisory: 'Optimal spraying window. Dry canopy ensures rapid leaf stomata penetration within 90 minutes. No additional adjuvant or sticker required.',
+      stickerRequiredMl: 0,
+      stickerText: 'None Required (Standard Foliar Spray)',
+      sprayRecommendation: 'Safe to Spray Now'
+    };
+  }
+  if (rainfallMm <= 15) {
+    return {
+      level: `Light Showers (${rainfallMm} mm)`,
+      status: 'Favorable',
+      badgeColor: '#0284C7',
+      badgeBg: '#E0F2FE',
+      washOffRisk: 'Low (< 10%)',
+      advisory: 'Spray during morning breaks. Allow 2 hours of drying time after spraying for complete systemic translaminar absorption.',
+      stickerRequiredMl: 0,
+      stickerText: 'Optional Sticker (0.2 ml/L)',
+      sprayRecommendation: 'Safe to Spray with Rain-Fast Buffer'
+    };
+  }
+  if (rainfallMm <= 40) {
+    return {
+      level: `Moderate Rain (${rainfallMm} mm)`,
+      status: 'Moderate Risk',
+      badgeColor: '#D97706',
+      badgeBg: '#FEF3C7',
+      washOffRisk: 'Moderate (25 - 40%)',
+      advisory: 'Rain wash-off risk present. Mix an organosilicone sticker/spreader adjuvant (Teepol / Wetcit @ 0.5 ml per liter of water) to ensure rain-fast adhesion within 30 minutes.',
+      stickerRequiredMl: 0.5,
+      stickerText: 'Sticker/Spreader Required (0.5 ml/L)',
+      sprayRecommendation: 'Spray with Rain-Fast Sticker Adjuvant'
+    };
+  }
+  return {
+    level: `Heavy Downpour (${rainfallMm} mm)`,
+    status: 'High Wash-Off Risk',
+    badgeColor: '#DC2626',
+    badgeBg: '#FEE2E2',
+    washOffRisk: 'High (> 70% chemical loss)',
+    advisory: 'Warning: Heavy rain will wash pesticide off crop foliage into soil runoff and irrigation drains, causing financial loss and chemical runoff into waterways. POSTPONE foliar spray until heavy rainfall subsides and leaf surfaces dry.',
+    stickerRequiredMl: 1.0,
+    stickerText: 'Heavy Rain Warning (Delay Recommended)',
+    sprayRecommendation: 'Postpone Spray by 24 Hours'
+  };
+}
 
 export default function CropDoctor({
   onRequisitionPesticide,
@@ -824,6 +1181,12 @@ export default function CropDoctor({
   const [isDemoMode, setIsDemoMode] = useState(false);
   const [recentDetections, setRecentDetections] = useState(RECENT_DETECTIONS);
   const [errorMsg, setErrorMsg] = useState(null);
+
+  // Field Acreage & Rainfall Dosage Calculator States
+  const [acres, setAcres] = useState(2.5);
+  const [rainfallMm, setRainfallMm] = useState(10);
+  const [copiedPrescription, setCopiedPrescription] = useState(false);
+  const [requisitionDone, setRequisitionDone] = useState(false);
 
   const fileInputRef = useRef(null);
   const cameraInputRef = useRef(null);
@@ -1852,6 +2215,682 @@ export default function CropDoctor({
                         </div>
                       ))}
                     </div>
+                  </div>
+                </div>
+              </div>
+            );
+          })()}
+
+          {/* ========================================================
+              AI PESTICIDE & SPRAY VOLUME CALCULATOR (ACRES & RAINFALL SLIDERS)
+          ======================================================== */}
+          {(() => {
+            const isInvalidPhoto = analysisResult && (
+              analysisResult.is_invalid ||
+              analysisResult.severity === 'Invalid' ||
+              (analysisResult.crop && analysisResult.crop.toLowerCase().includes('invalid'))
+            );
+
+            if (isInvalidPhoto) {
+              return (
+                <div
+                  className="white-card"
+                  style={{
+                    padding: '18px 20px',
+                    backgroundColor: theme.bgCard,
+                    border: '1px solid #FECACA',
+                    borderRadius: '12px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '12px'
+                  }}
+                >
+                  <AlertCircle size={22} color="#DC2626" />
+                  <div>
+                    <h4 style={{ margin: 0, fontSize: '13.5px', fontWeight: '800', color: '#DC2626' }}>
+                      Pesticide Calculation Paused
+                    </h4>
+                    <p style={{ margin: '2px 0 0 0', fontSize: '12px', color: theme.textMuted }}>
+                      Please upload or capture a real agricultural crop or leaf photo above to compute customized pesticide and water dosage.
+                    </p>
+                  </div>
+                </div>
+              );
+            }
+
+            // Determine active diagnosis source (live diagnosed photo or sample calibration)
+            const activeDiagnosis = (analysisResult && !analysisResult.is_invalid)
+              ? analysisResult
+              : SAMPLE_CASES[0];
+
+            const isFromLivePhoto = Boolean(analysisResult && !analysisResult.is_invalid);
+            const prescription = getPesticidePrescription(activeDiagnosis);
+            const rainfallImpact = getRainfallImpact(rainfallMm);
+
+            // Calculation mathematics
+            const totalChemicalRaw = prescription.dosePerAcre * acres;
+            const totalWaterLiters = Math.round(prescription.waterPerAcreLiters * acres);
+            const knapsack20LTanks = totalWaterLiters > 0 ? Math.ceil(totalWaterLiters / 20) : 0;
+            const knapsack16LTanks = totalWaterLiters > 0 ? Math.ceil(totalWaterLiters / 16) : 0;
+
+            // Chemical quantity formatting
+            let chemicalPrimary = '0 g';
+            let chemicalSecondary = '0 kg';
+            if (!prescription.isHealthy) {
+              if (prescription.unitType === 'powder') {
+                if (totalChemicalRaw >= 1000) {
+                  chemicalPrimary = `${(totalChemicalRaw / 1000).toFixed(2)} kg`;
+                  chemicalSecondary = `(${Math.round(totalChemicalRaw).toLocaleString()} grams)`;
+                } else {
+                  chemicalPrimary = `${Math.round(totalChemicalRaw)} grams`;
+                  chemicalSecondary = `(${(totalChemicalRaw / 1000).toFixed(2)} kg)`;
+                }
+              } else {
+                if (totalChemicalRaw >= 1000) {
+                  chemicalPrimary = `${(totalChemicalRaw / 1000).toFixed(2)} Liters`;
+                  chemicalSecondary = `(${Math.round(totalChemicalRaw).toLocaleString()} mL)`;
+                } else {
+                  chemicalPrimary = `${Math.round(totalChemicalRaw)} mL`;
+                  chemicalSecondary = `(${(totalChemicalRaw / 1000).toFixed(2)} L)`;
+                }
+              }
+            }
+
+            // Per Tank Dosage
+            let dosePer20L = '0';
+            let dosePer16L = '0';
+            if (!prescription.isHealthy && totalWaterLiters > 0) {
+              const u = prescription.unitType === 'powder' ? 'g' : 'mL';
+              dosePer20L = `${((totalChemicalRaw / totalWaterLiters) * 20).toFixed(1)} ${u}`;
+              dosePer16L = `${((totalChemicalRaw / totalWaterLiters) * 16).toFixed(1)} ${u}`;
+            }
+
+            // Rain-Fast Adjuvant sticker volume
+            const adjuvantTotalMl = totalWaterLiters > 0
+              ? Math.round(totalWaterLiters * (rainfallImpact.stickerRequiredMl || 0))
+              : 0;
+
+            // Estimated Cost Range
+            const estCostMin = Math.round(totalChemicalRaw * (prescription.costPerUnitEst || 0) * 0.9);
+            const estCostMax = Math.round(totalChemicalRaw * (prescription.costPerUnitEst || 0) * 1.15);
+
+            // Requisition click handler
+            const handleRequisitionClick = () => {
+              const textSummary = prescription.isHealthy
+                ? `Zero chemical pesticide needed for Healthy ${activeDiagnosis.crop}. Prescribed organic bio-fertilizer for ${acres} Acres.`
+                : `${prescription.pesticideName} (${chemicalPrimary} for ${acres} Acres in ${totalWaterLiters}L water, ${knapsack20LTanks} knapsack tanks)`;
+
+              if (onRequisitionPesticide) {
+                onRequisitionPesticide(textSummary);
+              }
+              setRequisitionDone(true);
+              setTimeout(() => setRequisitionDone(false), 3500);
+            };
+
+            // Copy to clipboard handler
+            const handleCopyDetails = () => {
+              const details = `AGRICONNECT AI CROP DOCTOR - SPRAY PRESCRIPTION
+Crop: ${activeDiagnosis.crop}
+Diagnosis: ${activeDiagnosis.condition || activeDiagnosis.disease} (${activeDiagnosis.severity})
+Field Size: ${acres} Acres (≈ ${(acres * 0.4047).toFixed(2)} Hectares)
+Expected Rainfall: ${rainfallMm} mm (${rainfallImpact.level})
+
+RECOMMENDED TREATMENT:
+Chemical: ${prescription.chemicalName}
+Active Ingredient: ${prescription.activeIngredient}
+Total Quantity Required: ${chemicalPrimary}
+Total Dilution Water: ${totalWaterLiters} Liters
+Knapsack Tanks (20L): ${knapsack20LTanks} Tanks (${dosePer20L} per tank)
+Knapsack Tanks (16L): ${knapsack16LTanks} Tanks (${dosePer16L} per tank)
+Rainfall Advisory: ${rainfallImpact.advisory}
+Rain-Fast Sticker: ${adjuvantTotalMl > 0 ? `${adjuvantTotalMl} mL Wetcit/Teepol` : 'None required'}
+Biological Alternative: ${prescription.organicAlternative}
+Pre-Harvest Interval (PHI): ${prescription.safetyIntervalDays} days`;
+
+              if (navigator.clipboard) {
+                navigator.clipboard.writeText(details);
+                setCopiedPrescription(true);
+                setTimeout(() => setCopiedPrescription(false), 2500);
+              }
+            };
+
+            return (
+              <div
+                className="white-card"
+                style={{
+                  padding: '22px',
+                  backgroundColor: theme.bgCard,
+                  border: `1.5px solid ${darkMode ? '#334155' : '#86EFAC'}`,
+                  borderRadius: '14px',
+                  boxShadow: '0 4px 18px rgba(22, 163, 74, 0.1)'
+                }}
+              >
+                {/* 1. Header with Title & Current Photo Link */}
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '12px', marginBottom: '16px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <div
+                      style={{
+                        width: '38px',
+                        height: '38px',
+                        borderRadius: '10px',
+                        backgroundColor: '#16A34A',
+                        color: '#FFFFFF',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        boxShadow: '0 3px 10px rgba(22, 163, 74, 0.3)',
+                        flexShrink: 0
+                      }}
+                    >
+                      <Calculator size={20} />
+                    </div>
+                    <div>
+                      <h3 style={{ fontSize: '16px', fontWeight: '900', color: theme.textHead, margin: 0, letterSpacing: '-0.2px' }}>
+                        {lang === 'ta' ? 'வயல் பூச்சிக்கொல்லி & தெளிப்பு அளவு கணக்கீடு' : 'Field Pesticide & Spray Volume Calculator'}
+                      </h3>
+                      <p style={{ fontSize: '12px', color: theme.textMuted, margin: '2px 0 0 0' }}>
+                        {lang === 'ta'
+                          ? 'உங்கள் பயிர்ப் புகைப்படம், நிலத்தின் ஏக்கர் மற்றும் மழைப்பொழிவின் அடிப்படையில் கணக்கிடப்படுகிறது.'
+                          : 'Calculates exact pesticide dose, spray water dilution, and tank loads tailored to your crop photo.'}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Active Detection Status Pill */}
+                  <div
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '6px',
+                      padding: '4px 10px',
+                      borderRadius: '20px',
+                      backgroundColor: isFromLivePhoto ? '#DCFCE7' : (darkMode ? '#334155' : '#F1F5F9'),
+                      border: isFromLivePhoto ? '1px solid #86EFAC' : `1px solid ${theme.borderMedium}`
+                    }}
+                  >
+                    <span
+                      style={{
+                        width: '8px',
+                        height: '8px',
+                        borderRadius: '50%',
+                        backgroundColor: isFromLivePhoto ? '#16A34A' : '#0284C7'
+                      }}
+                    />
+                    <span style={{ fontSize: '11px', fontWeight: '800', color: isFromLivePhoto ? '#15803D' : theme.textHead }}>
+                      {isFromLivePhoto ? `Photo Diagnosed: ${activeDiagnosis.crop} (${activeDiagnosis.condition})` : `Sample: ${activeDiagnosis.crop} (${activeDiagnosis.condition})`}
+                    </span>
+                  </div>
+                </div>
+
+                {/* 2. Interactive Sliders Grid (Acres & Rainfall) */}
+                <div
+                  style={{
+                    display: 'grid',
+                    gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
+                    gap: '16px',
+                    padding: '16px',
+                    borderRadius: '12px',
+                    backgroundColor: darkMode ? '#1E293B' : '#F8FAFC',
+                    border: `1px solid ${theme.border}`,
+                    marginBottom: '18px'
+                  }}
+                >
+                  {/* SLIDER 1: FARM AREA (ACRES) */}
+                  <div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        <Leaf size={15} color="#16A34A" />
+                        <span style={{ fontSize: '13px', fontWeight: '800', color: theme.textHead }}>
+                          {lang === 'ta' ? 'நிலப்பரப்பு (ஏக்கர்)' : 'Farm Area (Acres)'}
+                        </span>
+                      </div>
+                      <div style={{ textAlign: 'right' }}>
+                        <span
+                          style={{
+                            fontSize: '15px',
+                            fontWeight: '900',
+                            color: '#16A34A',
+                            backgroundColor: darkMode ? '#064E3B' : '#DCFCE7',
+                            padding: '2px 10px',
+                            borderRadius: '8px',
+                            display: 'inline-block'
+                          }}
+                        >
+                          {acres} {acres === 1 ? 'Acre' : 'Acres'}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Area Range Slider */}
+                    <input
+                      type="range"
+                      min="0.25"
+                      max="25"
+                      step="0.25"
+                      value={acres}
+                      onChange={(e) => setAcres(parseFloat(e.target.value))}
+                      style={{
+                        width: '100%',
+                        height: '7px',
+                        borderRadius: '5px',
+                        outline: 'none',
+                        cursor: 'pointer',
+                        accentColor: '#16A34A'
+                      }}
+                    />
+
+                    {/* Unit conversions & Quick Preset Chips */}
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '6px', fontSize: '11px', color: theme.textMuted }}>
+                      <span>≈ {(acres * 0.4047).toFixed(2)} Hectares</span>
+                      <span>{Math.round(acres * 100)} Cents</span>
+                    </div>
+
+                    <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginTop: '8px' }}>
+                      {[0.5, 1.0, 2.5, 5.0, 10.0].map((val) => (
+                        <button
+                          key={val}
+                          type="button"
+                          onClick={() => setAcres(val)}
+                          style={{
+                            background: acres === val ? '#16A34A' : (darkMode ? '#334155' : '#FFFFFF'),
+                            color: acres === val ? '#FFFFFF' : theme.textHead,
+                            border: acres === val ? '1px solid #16A34A' : `1px solid ${theme.borderMedium}`,
+                            borderRadius: '6px',
+                            padding: '3px 8px',
+                            fontSize: '10.5px',
+                            fontWeight: '700',
+                            cursor: 'pointer',
+                            transition: 'all 0.15s ease'
+                          }}
+                        >
+                          {val} Ac
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* SLIDER 2: EXPECTED RAINFALL (MM) */}
+                  <div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        <CloudRain size={15} color="#0284C7" />
+                        <span style={{ fontSize: '13px', fontWeight: '800', color: theme.textHead }}>
+                          {lang === 'ta' ? 'மழைப்பொழிவு (மிமீ)' : 'Rainfall (mm)'}
+                        </span>
+                      </div>
+                      <div style={{ textAlign: 'right' }}>
+                        <span
+                          style={{
+                            fontSize: '15px',
+                            fontWeight: '900',
+                            color: '#0284C7',
+                            backgroundColor: darkMode ? '#0C4A6E' : '#E0F2FE',
+                            padding: '2px 10px',
+                            borderRadius: '8px',
+                            display: 'inline-block'
+                          }}
+                        >
+                          {rainfallMm} mm
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Rainfall Range Slider */}
+                    <input
+                      type="range"
+                      min="0"
+                      max="120"
+                      step="1"
+                      value={rainfallMm}
+                      onChange={(e) => setRainfallMm(parseInt(e.target.value, 10))}
+                      style={{
+                        width: '100%',
+                        height: '7px',
+                        borderRadius: '5px',
+                        outline: 'none',
+                        cursor: 'pointer',
+                        accentColor: '#0284C7'
+                      }}
+                    />
+
+                    {/* Rainfall Status Badge */}
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '6px' }}>
+                      <span
+                        style={{
+                          fontSize: '11px',
+                          fontWeight: '800',
+                          padding: '1px 8px',
+                          borderRadius: '6px',
+                          backgroundColor: rainfallImpact.badgeBg,
+                          color: rainfallImpact.badgeColor
+                        }}
+                      >
+                        {rainfallImpact.status}
+                      </span>
+                      <span style={{ fontSize: '11px', color: theme.textMuted }}>
+                        Wash-off: {rainfallImpact.washOffRisk}
+                      </span>
+                    </div>
+
+                    <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginTop: '8px' }}>
+                      {[
+                        { label: '0 mm (Dry)', val: 0 },
+                        { label: '15 mm (Light)', val: 15 },
+                        { label: '35 mm (Shower)', val: 35 },
+                        { label: '75 mm (Heavy)', val: 75 }
+                      ].map((chip) => (
+                        <button
+                          key={chip.val}
+                          type="button"
+                          onClick={() => setRainfallMm(chip.val)}
+                          style={{
+                            background: rainfallMm === chip.val ? '#0284C7' : (darkMode ? '#334155' : '#FFFFFF'),
+                            color: rainfallMm === chip.val ? '#FFFFFF' : theme.textHead,
+                            border: rainfallMm === chip.val ? '1px solid #0284C7' : `1px solid ${theme.borderMedium}`,
+                            borderRadius: '6px',
+                            padding: '3px 8px',
+                            fontSize: '10.5px',
+                            fontWeight: '700',
+                            cursor: 'pointer',
+                            transition: 'all 0.15s ease'
+                          }}
+                        >
+                          {chip.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* 3. Dynamic Calculation Output Cards */}
+                {prescription.isHealthy ? (
+                  /* Healthy Crop Display */
+                  <div
+                    style={{
+                      padding: '16px 18px',
+                      borderRadius: '12px',
+                      backgroundColor: darkMode ? '#064E3B' : '#DCFCE7',
+                      border: '1.5px solid #16A34A',
+                      display: 'flex',
+                      alignItems: 'flex-start',
+                      gap: '14px',
+                      marginBottom: '16px'
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: '36px',
+                        height: '36px',
+                        borderRadius: '50%',
+                        backgroundColor: '#16A34A',
+                        color: '#FFFFFF',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        flexShrink: 0
+                      }}
+                    >
+                      <CheckCircle2 size={20} />
+                    </div>
+                    <div>
+                      <h4 style={{ margin: '0 0 4px 0', fontSize: '15px', fontWeight: '900', color: '#15803D' }}>
+                        {lang === 'ta' ? 'பூச்சிக்கொல்லி மருந்து தேவையில்லை (ஆரோக்கியமான பயிர்)' : '0 Liters Chemical Pesticides Needed (Healthy Crop)'}
+                      </h4>
+                      <p style={{ margin: '0 0 6px 0', fontSize: '12.5px', color: darkMode ? '#D1FAE5' : '#166534', lineHeight: 1.45 }}>
+                        {lang === 'ta'
+                          ? `நீங்கள் பதிவேற்றிய புகைப்படத்தில் பயிர் எந்தவித பூச்சி மற்றும் நோய்த்தாக்குதலின்றி ஆரோக்கியமாக உள்ளது. ${acres} ஏக்கருக்கும் எந்தவித ரசாயன பூச்சிக்கொல்லியும் தெளிக்க வேண்டாம்.`
+                          : `The photo you provided displays healthy foliage with no pathogenic necrosis or pest damage. Withhold chemical sprays across your ${acres} acres to save costs and conserve beneficial predatory insects.`}
+                      </p>
+                      <div style={{ fontSize: '11.5px', fontWeight: '700', color: '#15803D' }}>
+                        🌱 {lang === 'ta' ? 'விருப்பத் தேர்வு: பஞ்சகாவ்யா (3% தெளிப்பு) அல்லது அசோஸ்பைரில்லம் @ 500 கிராம்/ஏக்கர்.' : 'Optional organic maintenance: Panchagavya (3% foliar spray) or Azospirillum @ 500 g/acre.'}
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  /* Disease Prescribed Breakdown Grid (4 Modular Cards) */
+                  <div
+                    style={{
+                      display: 'grid',
+                      gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)',
+                      gap: '12px',
+                      marginBottom: '16px'
+                    }}
+                  >
+                    {/* Card A: Prescribed Pesticide Quantity */}
+                    <div
+                      style={{
+                        padding: '14px 16px',
+                        borderRadius: '10px',
+                        backgroundColor: darkMode ? '#1E293B' : '#F0FDF4',
+                        border: '1px solid #86EFAC',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'space-between'
+                      }}
+                    >
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                        <span style={{ fontSize: '11.5px', fontWeight: '800', color: '#15803D', textTransform: 'uppercase', letterSpacing: '0.3px' }}>
+                          {lang === 'ta' ? 'தேவைப்படும் மருந்து அளவு' : 'Total Pesticide Required'}
+                        </span>
+                        <Package size={16} color="#16A34A" />
+                      </div>
+                      <div>
+                        <div style={{ fontSize: '20px', fontWeight: '900', color: '#15803D', lineHeight: 1.2 }}>
+                          {chemicalPrimary}
+                        </div>
+                        <div style={{ fontSize: '11.5px', color: theme.textMuted, marginTop: '2px', fontWeight: '600' }}>
+                          {chemicalSecondary} • Rate: {prescription.dosePerAcre} {prescription.doseUnit}/acre
+                        </div>
+                      </div>
+                      <div style={{ fontSize: '11px', fontWeight: '700', color: theme.textHead, marginTop: '8px', borderTop: `1px solid ${darkMode ? '#334155' : '#DCFCE7'}`, paddingTop: '6px' }}>
+                        {prescription.chemicalName}
+                      </div>
+                    </div>
+
+                    {/* Card B: Total Dilution Water */}
+                    <div
+                      style={{
+                        padding: '14px 16px',
+                        borderRadius: '10px',
+                        backgroundColor: darkMode ? '#1E293B' : '#F0F9FF',
+                        border: '1px solid #BAE6FD',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'space-between'
+                      }}
+                    >
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                        <span style={{ fontSize: '11.5px', fontWeight: '800', color: '#0369A1', textTransform: 'uppercase', letterSpacing: '0.3px' }}>
+                          {lang === 'ta' ? 'தெளிப்புத் தண்ணீர் அளவு' : 'Total Spray Water Required'}
+                        </span>
+                        <Droplets size={16} color="#0284C7" />
+                      </div>
+                      <div>
+                        <div style={{ fontSize: '20px', fontWeight: '900', color: '#0369A1', lineHeight: 1.2 }}>
+                          {totalWaterLiters.toLocaleString()} Liters
+                        </div>
+                        <div style={{ fontSize: '11.5px', color: theme.textMuted, marginTop: '2px', fontWeight: '600' }}>
+                          {prescription.waterPerAcreLiters} L/acre • Optimal foliar coverage
+                        </div>
+                      </div>
+                      <div style={{ fontSize: '11px', fontWeight: '700', color: theme.textHead, marginTop: '8px', borderTop: `1px solid ${darkMode ? '#334155' : '#E0F2FE'}`, paddingTop: '6px' }}>
+                        Dilution Rate: {((totalChemicalRaw / totalWaterLiters)).toFixed(2)} {prescription.doseUnit} per Liter of clean water
+                      </div>
+                    </div>
+
+                    {/* Card C: Sprayer Knapsack Tanks */}
+                    <div
+                      style={{
+                        padding: '14px 16px',
+                        borderRadius: '10px',
+                        backgroundColor: darkMode ? '#1E293B' : '#FFFBEB',
+                        border: '1px solid #FDE68A',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'space-between'
+                      }}
+                    >
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                        <span style={{ fontSize: '11.5px', fontWeight: '800', color: '#B45309', textTransform: 'uppercase', letterSpacing: '0.3px' }}>
+                          {lang === 'ta' ? 'தெளிப்பான் டேங்க் எண்ணிக்கை' : 'Field Knapsack Tank Loads'}
+                        </span>
+                        <Zap size={16} color="#D97706" />
+                      </div>
+                      <div>
+                        <div style={{ fontSize: '20px', fontWeight: '900', color: '#B45309', lineHeight: 1.2 }}>
+                          {knapsack20LTanks} Tanks (20L)
+                        </div>
+                        <div style={{ fontSize: '11.5px', color: theme.textMuted, marginTop: '2px', fontWeight: '600' }}>
+                          or {knapsack16LTanks} Tanks of 16-Liter capacity
+                        </div>
+                      </div>
+                      <div style={{ fontSize: '11px', fontWeight: '700', color: '#92400E', marginTop: '8px', borderTop: `1px solid ${darkMode ? '#334155' : '#FEF3C7'}`, paddingTop: '6px' }}>
+                        Tank Scoop: Measure {dosePer20L} per 20L tank ({dosePer16L} per 16L tank)
+                      </div>
+                    </div>
+
+                    {/* Card D: Rainfall Impact & Sticker Adjuvant */}
+                    <div
+                      style={{
+                        padding: '14px 16px',
+                        borderRadius: '10px',
+                        backgroundColor: darkMode ? '#1E293B' : rainfallImpact.badgeBg,
+                        border: `1px solid ${rainfallImpact.badgeColor}40`,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'space-between'
+                      }}
+                    >
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                        <span style={{ fontSize: '11.5px', fontWeight: '800', color: rainfallImpact.badgeColor, textTransform: 'uppercase', letterSpacing: '0.3px' }}>
+                          {lang === 'ta' ? 'மழைப்பொழிவு தாக்கம்' : 'Weather & Wash-Off Risk'}
+                        </span>
+                        <Sun size={16} color={rainfallImpact.badgeColor} />
+                      </div>
+                      <div>
+                        <div style={{ fontSize: '18px', fontWeight: '900', color: rainfallImpact.badgeColor, lineHeight: 1.2 }}>
+                          {rainfallImpact.washOffRisk}
+                        </div>
+                        <div style={{ fontSize: '11.5px', color: theme.textHead, marginTop: '2px', fontWeight: '700' }}>
+                          {adjuvantTotalMl > 0 ? `Add ${adjuvantTotalMl} mL Sticker (Wetcit/Teepol)` : rainfallImpact.stickerText}
+                        </div>
+                      </div>
+                      <div style={{ fontSize: '10.5px', color: theme.textMuted, marginTop: '8px', borderTop: `1px solid ${darkMode ? '#334155' : '#E2E8F0'}`, paddingTop: '6px' }}>
+                        {rainfallImpact.sprayRecommendation}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* 4. Weather & Safety Guidance Banner */}
+                <div
+                  style={{
+                    padding: '12px 14px',
+                    borderRadius: '10px',
+                    backgroundColor: darkMode ? '#1E293B' : '#F8FAFC',
+                    border: `1px solid ${theme.border}`,
+                    marginBottom: '16px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '6px',
+                    fontSize: '12px',
+                    color: theme.textMain,
+                    lineHeight: 1.45
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <span style={{ fontWeight: '800', color: '#0284C7' }}>🌦️ Spray Timing Advisory:</span>
+                    <span>{rainfallImpact.advisory}</span>
+                  </div>
+                  {!prescription.isHealthy && (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <span style={{ fontWeight: '800', color: '#16A34A' }}>🌿 Eco-Friendly Bio Alternative:</span>
+                      <span>{prescription.organicAlternative}</span>
+                    </div>
+                  )}
+                  {!prescription.isHealthy && prescription.safetyIntervalDays > 0 && (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', color: theme.textMuted }}>
+                      <span style={{ fontWeight: '700', color: '#D97706' }}>⚠️ Pre-Harvest Interval (PHI):</span>
+                      <span>Maintain at least {prescription.safetyIntervalDays} days gap before harvesting. Wear protective mask and nitrile gloves.</span>
+                    </div>
+                  )}
+                </div>
+
+                {/* 5. Bottom Action Bar: Requisition & Share */}
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
+                  {/* Estimated Cost Preview */}
+                  <div>
+                    {!prescription.isHealthy ? (
+                      <div>
+                        <span style={{ fontSize: '11px', color: theme.textMuted, fontWeight: '600' }}>
+                          Estimated Chemical Cost:
+                        </span>
+                        <div style={{ fontSize: '15px', fontWeight: '900', color: theme.textHead }}>
+                          ₹{estCostMin.toLocaleString()} - ₹{estCostMax.toLocaleString()}{' '}
+                          <span style={{ fontSize: '11px', fontWeight: '600', color: theme.textMuted }}>
+                            (~₹{Math.round(estCostMin / Math.max(acres, 0.5))}/acre)
+                          </span>
+                        </div>
+                      </div>
+                    ) : (
+                      <div style={{ fontSize: '13px', fontWeight: '800', color: '#16A34A' }}>
+                        ₹0 Chemical Cost • Soil Microflora Protected
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                    <button
+                      type="button"
+                      onClick={handleCopyDetails}
+                      style={{
+                        padding: '9px 14px',
+                        borderRadius: '8px',
+                        border: `1px solid ${theme.borderMedium}`,
+                        backgroundColor: darkMode ? '#334155' : '#FFFFFF',
+                        color: theme.textHead,
+                        fontSize: '12px',
+                        fontWeight: '700',
+                        cursor: 'pointer',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                        transition: 'all 0.15s ease'
+                      }}
+                    >
+                      {copiedPrescription ? <CheckCheck size={14} color="#16A34A" /> : <Copy size={14} />}
+                      <span>{copiedPrescription ? (lang === 'ta' ? 'நகலெடுக்கப்பட்டது!' : 'Copied!') : (lang === 'ta' ? 'அளவை நகலெடு' : 'Copy Prescription')}</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={handleRequisitionClick}
+                      style={{
+                        padding: '9px 18px',
+                        borderRadius: '8px',
+                        border: 'none',
+                        backgroundColor: requisitionDone ? '#15803D' : '#16A34A',
+                        color: '#FFFFFF',
+                        fontSize: '12.5px',
+                        fontWeight: '800',
+                        cursor: 'pointer',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        boxShadow: '0 3px 10px rgba(22, 163, 74, 0.3)',
+                        transition: 'all 0.15s ease'
+                      }}
+                    >
+                      {requisitionDone ? <Check size={16} /> : <Package size={16} />}
+                      <span>
+                        {requisitionDone
+                          ? (lang === 'ta' ? 'கோரிக்கை அனுப்பப்பட்டது!' : 'Requisition Submitted!')
+                          : (prescription.isHealthy
+                            ? (lang === 'ta' ? 'பயோ டானிக் கோரிக்கை' : 'Requisition Bio Tonic')
+                            : (lang === 'ta' ? `மருந்து முன்பதிவு செய்க (${chemicalPrimary})` : `Requisition ${chemicalPrimary} to Depot`))}
+                      </span>
+                    </button>
                   </div>
                 </div>
               </div>
