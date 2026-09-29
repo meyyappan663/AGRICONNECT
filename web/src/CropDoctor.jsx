@@ -16,7 +16,9 @@ import {
   Check,
   Zap,
   Filter,
-  Package
+  Package,
+  AlertCircle,
+  XCircle
 } from 'lucide-react';
 
 // Generates SVG leaf illustrations as Data URLs for sample testing
@@ -332,8 +334,38 @@ async function callGeminiDirectly(base64Image, cropHint) {
   const pureB64 = base64Image.includes('base64,') ? base64Image.split('base64,')[1] : base64Image;
 
   const prompt = `You are Senior-AgriPath AI, an expert plant pathologist and agronomist.
-Analyze the provided crop foliage / leaf / panicle image with high precision.
 
+MANDATORY STEP 1 - IMAGE VALIDITY CHECK:
+Carefully examine the image. Does this image clearly depict a real agricultural plant, farm crop, leaf, stem, flower, fruit, seedling, panicle, or field crop?
+IF THE IMAGE IS NOT A PLANT OR CROP (for example: a laptop, computer screen, monitor, keyboard, mobile phone, electronics, indoor room, desk, vehicle, wall, ceiling, person, human selfie/face, animal, furniture, clothing, document, paper, or any non-botanical object):
+You MUST immediately reject it and return STRICTLY this JSON with is_plant: false and severity: "Invalid":
+{
+  "is_plant": false,
+  "is_invalid": true,
+  "crop": "Invalid (Not a Plant)",
+  "disease": "No Plant or Crop Detected",
+  "disease_type": "Invalid Image",
+  "confidence": 0.99,
+  "severity": "Invalid",
+  "symptoms": [
+    "No agricultural foliage, leaf structure, or crop tissue detected in this photo.",
+    "The uploaded image appears to be an electronic device, indoor room, person, or non-plant object."
+  ],
+  "cause": "Non-plant image uploaded. Crop Doctor requires clear photographs of agricultural plants or foliage.",
+  "solutions": [
+    "Please upload a clear photograph of an agricultural crop, leaf, or farm plant.",
+    "Ensure the crop or leaf is in focus and occupies the main part of the picture."
+  ],
+  "steps": [
+    "Point your camera directly at the crop or leaf.",
+    "Ensure natural outdoor or good ambient lighting.",
+    "Hold the phone steady 15-30 cm away from the leaf and snap."
+  ]
+}
+
+DO NOT under any circumstances classify a laptop, device, or room as Rice or any other crop.
+
+MANDATORY STEP 2 - CROP PATHOLOGY ANALYSIS (ONLY IF IT IS A CONFIRMED PLANT):
 CRUCIAL DOMAIN KNOWLEDGE FOR CEREAL CROPS (Rice, Wheat, Maize):
 - In rice and cereal crops, maturing golden-yellow or yellowish-green grain heads (panicles) during the dough/ripening phase are completely NORMAL and HEALTHY. This is physiological grain filling, NOT Bacterial Leaf Blight, chlorosis, or blast.
 - Only diagnose disease if genuine necrotic lesions (e.g. spindle lesions with ash centers, wavy brown leaf margins with bacterial ooze, necrotic target spots) are present.
@@ -350,6 +382,8 @@ CRUCIAL DOMAIN KNOWLEDGE FOR CEREAL CROPS (Rice, Wheat, Maize):
 
 Strictly return a single valid JSON object without surrounding commentary:
 {
+  "is_plant": true,
+  "is_invalid": false,
   "crop": "Detected crop name (e.g., Rice, Cotton, Tomato, Potato, Banana, Maize)",
   "disease": "Specific disease or condition name (e.g., Healthy Ripening Crop (No Disease), Rice Leaf Blast, Early Blight)",
   "disease_type": "Fungal Disease / Bacterial Disease / Viral Disease / Pest Infestation / Nutrient Deficiency / Healthy",
@@ -449,6 +483,43 @@ function analyzeImageWithCV(imageSrc, cropHint, fileName) {
 
         const fileLower = (fileName || '').toLowerCase();
         const hintLower = (cropHint || '').toLowerCase();
+
+        // 0. Non-Plant / Invalid Image Detection Check:
+        const totalPlantPixels = totalGreen + (totalYellow * 0.7) + (totalBrown * 0.5);
+        const plantRatio = totalPlantPixels / totalPixels;
+
+        const isKnownPlantName = hintLower.includes('rice') || hintLower.includes('paddy') || hintLower.includes('cotton') ||
+          hintLower.includes('banana') || hintLower.includes('tomato') || hintLower.includes('potato') ||
+          hintLower.includes('maize') || hintLower.includes('corn') || hintLower.includes('chilli') ||
+          fileLower.includes('leaf') || fileLower.includes('crop') || fileLower.includes('plant') || fileLower.includes('farm');
+
+        if ((plantRatio < 0.05 || (greenRatio < 0.02 && yellowRatio < 0.035 && brownRatio < 0.025)) && !isKnownPlantName) {
+          return resolve({
+            is_plant: false,
+            is_invalid: true,
+            crop: 'Invalid (Not a Plant)',
+            condition: 'No Plant or Crop Detected',
+            disease_type: 'Invalid Image',
+            severity: 'Invalid',
+            severityColor: '#DC2626',
+            severityBg: '#FEE2E2',
+            confidence: 0.99,
+            symptoms: [
+              'No agricultural foliage, leaf structure, or crop tissue detected in this photo.',
+              'The uploaded image appears to show an electronic device, laptop, indoor room, or non-plant object.'
+            ],
+            cause: 'Non-plant image uploaded. Crop Doctor requires clear photographs of agricultural plants or foliage.',
+            solutions: [
+              'Please upload a clear photograph of an agricultural crop, leaf, or farm plant.',
+              'Ensure the crop or leaf is in focus and occupies the main part of the picture.'
+            ],
+            steps: [
+              'Point camera directly at the crop or leaf.',
+              'Ensure natural outdoor or good ambient lighting.',
+              'Hold camera steady 15-30 cm away from the leaf and snap.'
+            ]
+          });
+        }
 
         // 1. Healthy Foliage Check:
         if (brownRatio < 0.025 && yellowRatio < 0.05 && greenRatio > 0.20) {
@@ -895,29 +966,45 @@ export default function CropDoctor({
     if (!result) {
       try {
         const geminiData = await callGeminiDirectly(selectedImage, selectedCropHint);
-        if (geminiData && geminiData.disease && geminiData.crop) {
+        if (geminiData && (geminiData.disease || geminiData.condition) && geminiData.crop) {
+          const isInv = geminiData.is_invalid || geminiData.is_plant === false || geminiData.severity === 'Invalid' ||
+            (geminiData.crop && geminiData.crop.toLowerCase().includes('invalid'));
           result = {
-            crop: geminiData.crop,
-            condition: geminiData.disease,
-            disease_type: geminiData.disease_type || 'Fungal Disease',
-            severity: geminiData.severity || 'Moderate',
-            severityColor: geminiData.severity === 'Severe' ? '#DC2626' : geminiData.severity === 'Moderate' ? '#D97706' : '#16A34A',
-            severityBg: geminiData.severity === 'Severe' ? '#FEE2E2' : geminiData.severity === 'Moderate' ? '#FEF3C7' : '#DCFCE7',
-            confidence: geminiData.confidence || 0.93,
-            symptoms: geminiData.symptoms || [
+            is_invalid: isInv,
+            crop: isInv ? 'Invalid (Not a Plant)' : geminiData.crop,
+            condition: isInv ? 'No Plant or Crop Detected' : (geminiData.disease || geminiData.condition),
+            disease_type: isInv ? 'Invalid Image' : (geminiData.disease_type || 'Fungal Disease'),
+            severity: isInv ? 'Invalid' : (geminiData.severity || 'Moderate'),
+            severityColor: (isInv || geminiData.severity === 'Severe') ? '#DC2626' : geminiData.severity === 'Moderate' ? '#D97706' : '#16A34A',
+            severityBg: (isInv || geminiData.severity === 'Severe') ? '#FEE2E2' : geminiData.severity === 'Moderate' ? '#FEF3C7' : '#DCFCE7',
+            confidence: geminiData.confidence || (isInv ? 0.99 : 0.93),
+            symptoms: geminiData.symptoms || (isInv ? [
+              'No agricultural foliage or crop leaves detected in this image.',
+              'Object appears to be an electronic device, room, or non-plant object.'
+            ] : [
               'Visual lesions with discoloration on foliage',
               'Irregular chlorotic margins'
-            ],
-            cause: geminiData.cause || 'Pathogen proliferation under favorable temperature and moisture.',
-            solutions: geminiData.solutions || [
+            ]),
+            cause: geminiData.cause || (isInv ?
+              'Non-plant image uploaded. Crop Doctor requires clear photographs of agricultural plants or leaves.' :
+              'Pathogen proliferation under favorable temperature and moisture.'
+            ),
+            solutions: geminiData.solutions || (isInv ? [
+              'Please upload a clear photograph of an agricultural crop, leaf, or farm plant.',
+              'Ensure the crop or leaf is in focus and occupies the main part of the picture.'
+            ] : [
               'Apply recommended curative pesticide at standard label dilution.',
               'Follow approved local university plant protection schedule.'
-            ],
-            steps: geminiData.steps || [
+            ]),
+            steps: geminiData.steps || (isInv ? [
+              'Point your camera directly at the crop or leaf.',
+              'Ensure natural outdoor or good ambient lighting.',
+              'Hold camera steady 15-30 cm away from the leaf and snap.'
+            ] : [
               'Isolate infected crop sections where feasible.',
               'Improve canopy airflow and adjust irrigation.',
               'Apply protective spray during early morning hours.'
-            ]
+            ])
           };
         }
       } catch (_) {
@@ -934,28 +1021,53 @@ export default function CropDoctor({
       }
     }
 
-    // Default to verified sample if all else fails
+    // Default to invalid rejection notice if all else fails
     if (!result) {
-      result = SAMPLE_CASES[0];
+      result = {
+        is_invalid: true,
+        crop: 'Invalid (Not a Plant)',
+        condition: 'No Plant or Crop Detected',
+        disease_type: 'Invalid Image',
+        severity: 'Invalid',
+        severityColor: '#DC2626',
+        severityBg: '#FEE2E2',
+        confidence: 0.99,
+        symptoms: [
+          'No agricultural foliage or crop leaves detected in this image.',
+          'Object appears to be an electronic device, room, or non-plant object.'
+        ],
+        cause: 'Non-plant image uploaded. Crop Doctor requires clear photographs of agricultural plants or foliage.',
+        solutions: [
+          'Please upload a clear photograph of an agricultural crop, leaf, or farm plant.',
+          'Ensure the crop or leaf is in focus and occupies the main part of the picture.'
+        ],
+        steps: [
+          'Point your camera directly at the crop or leaf.',
+          'Ensure natural outdoor or good ambient lighting.',
+          'Hold camera steady 15-30 cm away from the leaf and snap.'
+        ]
+      };
     }
 
     setAnalysisResult(result);
     setIsDemoMode(false);
     setIsAnalyzing(false);
 
-    // Add this new detection to Recent Detections card list
-    const newRecent = {
-      id: `rec-${Date.now()}`,
-      crop: result.crop,
-      disease: result.condition,
-      confidence: `${Math.round(result.confidence * 100)}%`,
-      severity: result.severity,
-      severityColor: result.severityColor,
-      severityBg: result.severityBg,
-      date: 'Just now',
-      image: selectedImage
-    };
-    setRecentDetections((prev) => [newRecent, ...prev.slice(0, 4)]);
+    // Only add legitimate detections to Recent Detections card list
+    if (!result.is_invalid) {
+      const newRecent = {
+        id: `rec-${Date.now()}`,
+        crop: result.crop,
+        disease: result.condition,
+        confidence: `${Math.round(result.confidence * 100)}%`,
+        severity: result.severity,
+        severityColor: result.severityColor,
+        severityBg: result.severityBg,
+        date: 'Just now',
+        image: selectedImage
+      };
+      setRecentDetections((prev) => [newRecent, ...prev.slice(0, 4)]);
+    }
   };
 
   // Load sample case into workflow
@@ -1432,308 +1544,319 @@ export default function CropDoctor({
             </div>
 
             {/* AI ANALYSIS RESULT CARD (Appears beside the upload) */}
-            {analysisResult && (
-              <div
-                className="white-card"
-                style={{
-                  padding: '20px',
-                  backgroundColor: theme.bgCard,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'space-between',
-                  borderLeft: `4px solid ${analysisResult.severityColor || '#16A34A'}`
-                }}
-              >
-                <div>
-                  {/* Card Header Tag */}
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                      <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#16A34A' }} />
-                      <span style={{ fontSize: '11px', fontWeight: '800', color: '#16A34A', letterSpacing: '0.4px', textTransform: 'uppercase' }}>
-                        AI Analysis Result
-                      </span>
-                    </div>
+            {analysisResult && (() => {
+              const isInvalid = analysisResult.is_invalid || analysisResult.severity === 'Invalid' ||
+                (analysisResult.crop && analysisResult.crop.toLowerCase().includes('invalid'));
 
-                    {isDemoMode && (
-                      <span style={{ fontSize: '10px', fontWeight: '800', backgroundColor: '#FEF3C7', color: '#D97706', padding: '2px 7px', borderRadius: '6px' }}>
-                        Demo Mode
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Result Details Grid */}
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', marginBottom: '16px' }}>
-                    {/* Detected Crop */}
-                    <div>
-                      <span style={{ fontSize: '11px', color: theme.textMuted, fontWeight: '600' }}>
-                        Detected Crop:
-                      </span>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '2px' }}>
-                        <Leaf size={15} color="#16A34A" />
-                        <span style={{ fontSize: '15px', fontWeight: '800', color: theme.textHead }}>
-                          {analysisResult.crop}
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Detected Condition */}
-                    <div>
-                      <span style={{ fontSize: '11px', color: theme.textMuted, fontWeight: '600' }}>
-                        Detected Condition:
-                      </span>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '2px' }}>
-                        <span>{analysisResult.severity === 'Healthy' ? '🌱' : '🍂'}</span>
-                        <span style={{ fontSize: '15px', fontWeight: '800', color: analysisResult.severityColor || (analysisResult.severity === 'Healthy' ? '#16A34A' : '#DC2626') }}>
-                          {analysisResult.condition}
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Disease Type */}
-                    <div>
-                      <span style={{ fontSize: '11px', color: theme.textMuted, fontWeight: '600' }}>
-                        Disease Type:
-                      </span>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '2px' }}>
-                        <ShieldCheck size={15} color={analysisResult.severity === 'Healthy' ? '#16A34A' : '#0284C7'} />
-                        <span style={{ fontSize: '13px', fontWeight: '700', color: theme.textHead }}>
-                          {analysisResult.disease_type}
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Severity Badge */}
-                    <div>
-                      <span style={{ fontSize: '11px', color: theme.textMuted, fontWeight: '600' }}>
-                        Severity:
-                      </span>
-                      <div style={{ marginTop: '2px' }}>
-                        <span
-                          style={{
-                            backgroundColor: analysisResult.severityBg || (analysisResult.severity === 'Healthy' ? '#DCFCE7' : '#FEE2E2'),
-                            color: analysisResult.severityColor || (analysisResult.severity === 'Healthy' ? '#16A34A' : '#DC2626'),
-                            fontSize: '11.5px',
-                            fontWeight: '800',
-                            padding: '3px 9px',
-                            borderRadius: '12px',
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: '4px'
-                          }}
-                        >
-                          {analysisResult.severity === 'Healthy' ? (
-                            <CheckCircle2 size={12} />
-                          ) : (
-                            <AlertTriangle size={12} />
-                          )}
-                          {analysisResult.severity}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Confidence Progress Bar */}
+              return (
+                <div
+                  className="white-card"
+                  style={{
+                    padding: '20px',
+                    backgroundColor: theme.bgCard,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    borderLeft: `4px solid ${isInvalid ? '#DC2626' : (analysisResult.severityColor || '#16A34A')}`
+                  }}
+                >
                   <div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11.5px', fontWeight: '700', marginBottom: '4px' }}>
-                      <span style={{ color: theme.textMuted }}>Confidence:</span>
-                      <span style={{ color: '#16A34A' }}>{Math.round(analysisResult.confidence * 100)}%</span>
+                    {/* Card Header Tag */}
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: isInvalid ? '#DC2626' : '#16A34A' }} />
+                        <span style={{ fontSize: '11px', fontWeight: '800', color: isInvalid ? '#DC2626' : '#16A34A', letterSpacing: '0.4px', textTransform: 'uppercase' }}>
+                          {isInvalid ? 'Invalid Image Detected' : 'AI Analysis Result'}
+                        </span>
+                      </div>
+
+                      {isDemoMode && (
+                        <span style={{ fontSize: '10px', fontWeight: '800', backgroundColor: '#FEF3C7', color: '#D97706', padding: '2px 7px', borderRadius: '6px' }}>
+                          Demo Mode
+                        </span>
+                      )}
                     </div>
-                    <div style={{ width: '100%', height: '8px', borderRadius: '4px', backgroundColor: darkMode ? '#334155' : '#E2E8F0', overflow: 'hidden' }}>
-                      <div
-                        style={{
-                          width: `${Math.round(analysisResult.confidence * 100)}%`,
-                          height: '100%',
-                          borderRadius: '4px',
-                          backgroundColor: '#16A34A',
-                          transition: 'width 0.4s ease'
-                        }}
-                      />
+
+                    {/* Result Details Grid */}
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', marginBottom: '16px' }}>
+                      {/* Detected Crop */}
+                      <div>
+                        <span style={{ fontSize: '11px', color: theme.textMuted, fontWeight: '600' }}>
+                          Detected Crop:
+                        </span>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '2px' }}>
+                          {isInvalid ? <AlertCircle size={15} color="#DC2626" /> : <Leaf size={15} color="#16A34A" />}
+                          <span style={{ fontSize: '15px', fontWeight: '800', color: isInvalid ? '#DC2626' : theme.textHead }}>
+                            {analysisResult.crop}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Detected Condition */}
+                      <div>
+                        <span style={{ fontSize: '11px', color: theme.textMuted, fontWeight: '600' }}>
+                          Detected Condition:
+                        </span>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '2px' }}>
+                          <span>{isInvalid ? '🚫' : (analysisResult.severity === 'Healthy' ? '🌱' : '🍂')}</span>
+                          <span style={{ fontSize: '15px', fontWeight: '800', color: isInvalid ? '#DC2626' : (analysisResult.severityColor || (analysisResult.severity === 'Healthy' ? '#16A34A' : '#DC2626')) }}>
+                            {analysisResult.condition}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Disease Type */}
+                      <div>
+                        <span style={{ fontSize: '11px', color: theme.textMuted, fontWeight: '600' }}>
+                          Disease Type:
+                        </span>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '2px' }}>
+                          {isInvalid ? <XCircle size={15} color="#DC2626" /> : <ShieldCheck size={15} color={analysisResult.severity === 'Healthy' ? '#16A34A' : '#0284C7'} />}
+                          <span style={{ fontSize: '13px', fontWeight: '700', color: isInvalid ? '#DC2626' : theme.textHead }}>
+                            {analysisResult.disease_type}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Severity Badge */}
+                      <div>
+                        <span style={{ fontSize: '11px', color: theme.textMuted, fontWeight: '600' }}>
+                          Severity:
+                        </span>
+                        <div style={{ marginTop: '2px' }}>
+                          <span
+                            style={{
+                              backgroundColor: isInvalid ? '#FEE2E2' : (analysisResult.severityBg || (analysisResult.severity === 'Healthy' ? '#DCFCE7' : '#FEE2E2')),
+                              color: isInvalid ? '#DC2626' : (analysisResult.severityColor || (analysisResult.severity === 'Healthy' ? '#16A34A' : '#DC2626')),
+                              fontSize: '11.5px',
+                              fontWeight: '800',
+                              padding: '3px 9px',
+                              borderRadius: '12px',
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '4px'
+                            }}
+                          >
+                            {isInvalid ? <AlertTriangle size={12} /> : (analysisResult.severity === 'Healthy' ? <CheckCircle2 size={12} /> : <AlertTriangle size={12} />)}
+                            {isInvalid ? 'Invalid Image' : analysisResult.severity}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Confidence Progress Bar */}
+                    <div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11.5px', fontWeight: '700', marginBottom: '4px' }}>
+                        <span style={{ color: theme.textMuted }}>Confidence:</span>
+                        <span style={{ color: isInvalid ? '#DC2626' : '#16A34A' }}>{Math.round(analysisResult.confidence * 100)}%</span>
+                      </div>
+                      <div style={{ width: '100%', height: '8px', borderRadius: '4px', backgroundColor: darkMode ? '#334155' : '#E2E8F0', overflow: 'hidden' }}>
+                        <div
+                          style={{
+                            width: `${Math.round(analysisResult.confidence * 100)}%`,
+                            height: '100%',
+                            borderRadius: '4px',
+                            backgroundColor: isInvalid ? '#DC2626' : '#16A34A',
+                            transition: 'width 0.4s ease'
+                          }}
+                        />
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                <div style={{ fontSize: '10.5px', color: theme.textMuted, marginTop: '14px', borderTop: `1px solid ${theme.border}`, paddingTop: '8px' }}>
-                  Model based on TNAU Plant Pathology diagnostic criteria.
+                  <div style={{ fontSize: '10.5px', color: theme.textMuted, marginTop: '14px', borderTop: `1px solid ${theme.border}`, paddingTop: '8px' }}>
+                    {isInvalid ? 'Crop Doctor is trained for agricultural crops and plant pathology only.' : 'Model based on TNAU Plant Pathology diagnostic criteria.'}
+                  </div>
                 </div>
-              </div>
-            )}
+              );
+            })()}
           </div>
 
           {/* ========================================================
               DISEASE INFORMATION: WHAT IS THIS DISEASE?
           ======================================================== */}
-          {analysisResult && (
-            <div
-              className="white-card"
-              style={{
-                padding: '20px',
-                backgroundColor: theme.bgCard
-              }}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px' }}>
-                <div style={{ width: '22px', height: '22px', borderRadius: '50%', backgroundColor: '#E0F2FE', color: '#0284C7', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <Info size={14} />
+          {analysisResult && (() => {
+            const isInvalid = analysisResult.is_invalid || analysisResult.severity === 'Invalid' ||
+              (analysisResult.crop && analysisResult.crop.toLowerCase().includes('invalid'));
+
+            return (
+              <div
+                className="white-card"
+                style={{
+                  padding: '20px',
+                  backgroundColor: theme.bgCard
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px' }}>
+                  <div style={{ width: '22px', height: '22px', borderRadius: '50%', backgroundColor: isInvalid ? '#FEE2E2' : '#E0F2FE', color: isInvalid ? '#DC2626' : '#0284C7', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    {isInvalid ? <AlertCircle size={14} /> : <Info size={14} />}
+                  </div>
+                  <h3 style={{ fontSize: '15px', fontWeight: '800', color: isInvalid ? '#DC2626' : theme.textHead, margin: 0 }}>
+                    {isInvalid ? '⚠️ Invalid Image: No Plant or Crop Detected' : (analysisResult.severity === 'Healthy' ? 'Crop Health & Maturity Assessment' : 'What is this disease?')}
+                  </h3>
                 </div>
-                <h3 style={{ fontSize: '15px', fontWeight: '800', color: theme.textHead, margin: 0 }}>
-                  {analysisResult.severity === 'Healthy' ? 'Crop Health & Maturity Assessment' : 'What is this disease?'}
-                </h3>
+
+                <p style={{ fontSize: '13px', color: theme.textMain, margin: '0 0 12px 0', lineHeight: 1.5 }}>
+                  {analysisResult.cause}
+                </p>
+
+                {analysisResult.symptoms && analysisResult.symptoms.length > 0 && (
+                  <div>
+                    <span style={{ fontSize: '12px', fontWeight: '700', color: theme.textHead, display: 'block', marginBottom: '6px' }}>
+                      {isInvalid ? 'Key Visual Observations:' : (analysisResult.severity === 'Healthy' ? 'Key Observed Characteristics:' : 'Key Visual Symptoms:')}
+                    </span>
+                    <ul style={{ margin: 0, paddingLeft: '20px', fontSize: '12.5px', color: theme.textMain, lineHeight: 1.5 }}>
+                      {analysisResult.symptoms.map((s, idx) => (
+                        <li key={idx}>{s}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
               </div>
-
-              <p style={{ fontSize: '13px', color: theme.textMain, margin: '0 0 12px 0', lineHeight: 1.5 }}>
-                {analysisResult.cause}
-              </p>
-
-              {analysisResult.symptoms && analysisResult.symptoms.length > 0 && (
-                <div>
-                  <span style={{ fontSize: '12px', fontWeight: '700', color: theme.textHead, display: 'block', marginBottom: '6px' }}>
-                    {analysisResult.severity === 'Healthy' ? 'Key Observed Characteristics:' : 'Key Visual Symptoms:'}
-                  </span>
-                  <ul style={{ margin: 0, paddingLeft: '20px', fontSize: '12.5px', color: theme.textMain, lineHeight: 1.5 }}>
-                    {analysisResult.symptoms.map((s, idx) => (
-                      <li key={idx}>{s}</li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-            </div>
-          )}
+            );
+          })()}
 
           {/* ========================================================
               RECOMMENDED SOLUTION (TREATMENT SECTION)
           ======================================================== */}
-          {analysisResult && (
-            <div
-              className="white-card"
-              style={{
-                padding: '20px',
-                backgroundColor: theme.bgCard
-              }}
-            >
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <div style={{ width: '22px', height: '22px', borderRadius: '50%', backgroundColor: '#DCFCE7', color: '#16A34A', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <Leaf size={14} />
-                  </div>
-                  <h3 style={{ fontSize: '15px', fontWeight: '800', color: theme.textHead, margin: 0 }}>
-                    {analysisResult.severity === 'Healthy' ? 'Recommended Action & Care' : 'Recommended Solution'}
-                  </h3>
-                </div>
+          {analysisResult && (() => {
+            const isInvalid = analysisResult.is_invalid || analysisResult.severity === 'Invalid' ||
+              (analysisResult.crop && analysisResult.crop.toLowerCase().includes('invalid'));
 
-                <span
-                  style={{
-                    backgroundColor: '#DCFCE7',
-                    color: '#16A34A',
-                    fontSize: '11px',
-                    fontWeight: '800',
-                    padding: '3px 10px',
-                    borderRadius: '12px'
-                  }}
-                >
-                  {analysisResult.severity === 'Healthy' ? 'Healthy' : 'Treatment'}
-                </span>
-              </div>
-
-              {/* 2 Sub-Columns: Medicine/Treatment Guide + Steps to Follow */}
+            return (
               <div
+                className="white-card"
                 style={{
-                  display: 'grid',
-                  gridTemplateColumns: isMobile ? '1fr' : '1.1fr 1fr',
-                  gap: '16px'
+                  padding: '20px',
+                  backgroundColor: theme.bgCard
                 }}
               >
-                {/* 1. Medicine / Treatment Guide */}
-                <div
-                  style={{
-                    padding: '16px',
-                    borderRadius: '10px',
-                    backgroundColor: darkMode ? '#1E293B' : '#F8FAFC',
-                    border: `1px solid ${theme.border}`,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'space-between'
-                  }}
-                >
-                  <div>
-                    <div style={{ fontSize: '11px', fontWeight: '800', color: '#0284C7', textTransform: 'uppercase', letterSpacing: '0.4px', marginBottom: '10px' }}>
-                      {analysisResult.severity === 'Healthy' ? 'FARM ADVISORY & CARE GUIDE' : 'MEDICINE / TREATMENT GUIDE'}
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <div style={{ width: '22px', height: '22px', borderRadius: '50%', backgroundColor: isInvalid ? '#FEE2E2' : '#DCFCE7', color: isInvalid ? '#DC2626' : '#16A34A', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      {isInvalid ? <AlertTriangle size={14} /> : <Leaf size={14} />}
                     </div>
-
-                    <ul style={{ margin: 0, paddingLeft: '18px', fontSize: '12px', color: theme.textMain, lineHeight: 1.6 }}>
-                      {analysisResult.solutions && analysisResult.solutions.map((sol, i) => (
-                        <li key={i} style={{ marginBottom: '6px' }}>
-                          {sol}
-                        </li>
-                      ))}
-                    </ul>
+                    <h3 style={{ fontSize: '15px', fontWeight: '800', color: theme.textHead, margin: 0 }}>
+                      {isInvalid ? 'How to Capture a Valid Crop Image' : (analysisResult.severity === 'Healthy' ? 'Recommended Action & Care' : 'Recommended Solution')}
+                    </h3>
                   </div>
 
-                  {/* Safety Disclaimer Box */}
-                  <div
+                  <span
                     style={{
-                      marginTop: '14px',
-                      padding: '8px 12px',
-                      borderRadius: '8px',
-                      backgroundColor: darkMode ? '#2B2414' : '#FFFBEB',
-                      border: '1px solid #FDE68A',
-                      fontSize: '10.5px',
-                      color: '#92400E',
-                      lineHeight: 1.35
+                      backgroundColor: isInvalid ? '#FEE2E2' : '#DCFCE7',
+                      color: isInvalid ? '#DC2626' : '#16A34A',
+                      fontSize: '11px',
+                      fontWeight: '800',
+                      padding: '3px 10px',
+                      borderRadius: '12px'
                     }}
                   >
-                    ⚠️ This is general guidance. Use only products approved for this crop and disease in your region and follow local agricultural authority guidance.
-                  </div>
+                    {isInvalid ? 'Invalid Photo' : (analysisResult.severity === 'Healthy' ? 'Healthy' : 'Treatment')}
+                  </span>
                 </div>
 
-                {/* 2. Steps to Follow */}
+                {/* 2 Sub-Columns: Guide + Steps to Follow */}
                 <div
                   style={{
-                    padding: '16px',
-                    borderRadius: '10px',
-                    backgroundColor: darkMode ? '#1E293B' : '#F8FAFC',
-                    border: `1px solid ${theme.border}`
+                    display: 'grid',
+                    gridTemplateColumns: isMobile ? '1fr' : '1.1fr 1fr',
+                    gap: '16px'
                   }}
                 >
-                  <div style={{ fontSize: '11px', fontWeight: '800', color: '#16A34A', textTransform: 'uppercase', letterSpacing: '0.4px', marginBottom: '10px' }}>
-                    STEPS TO FOLLOW
+                  {/* 1. Guide Column */}
+                  <div
+                    style={{
+                      padding: '16px',
+                      borderRadius: '10px',
+                      backgroundColor: darkMode ? '#1E293B' : '#F8FAFC',
+                      border: `1px solid ${theme.border}`,
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'space-between'
+                    }}
+                  >
+                    <div>
+                      <div style={{ fontSize: '11px', fontWeight: '800', color: isInvalid ? '#DC2626' : '#0284C7', textTransform: 'uppercase', letterSpacing: '0.4px', marginBottom: '10px' }}>
+                        {isInvalid ? 'IMAGE REQUIREMENTS FOR CROP DIAGNOSIS' : (analysisResult.severity === 'Healthy' ? 'FARM ADVISORY & CARE GUIDE' : 'MEDICINE / TREATMENT GUIDE')}
+                      </div>
+
+                      <ul style={{ margin: 0, paddingLeft: '18px', fontSize: '12px', color: theme.textMain, lineHeight: 1.6 }}>
+                        {analysisResult.solutions && analysisResult.solutions.map((sol, i) => (
+                          <li key={i} style={{ marginBottom: '6px' }}>
+                            {sol}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    {/* Safety Disclaimer Box */}
+                    <div
+                      style={{
+                        marginTop: '14px',
+                        padding: '8px 12px',
+                        borderRadius: '8px',
+                        backgroundColor: darkMode ? '#2B2414' : (isInvalid ? '#FEF2F2' : '#FFFBEB'),
+                        border: isInvalid ? '1px solid #FECACA' : '1px solid #FDE68A',
+                        fontSize: '10.5px',
+                        color: isInvalid ? '#991B1B' : '#92400E',
+                        lineHeight: 1.35
+                      }}
+                    >
+                      {isInvalid ? '⚠️ Crop Doctor is calibrated exclusively for agricultural plants and crops. Non-agricultural objects cannot be diagnosed.' : '⚠️ This is general guidance. Use only products approved for this crop and disease in your region and follow local agricultural authority guidance.'}
+                    </div>
                   </div>
 
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                    {(analysisResult.steps || [
-                      'Diagnose accurately (affected leaves and plant details).',
-                      'Keep infected plants separated where possible.',
-                      'Maintain proper field conditions and good drainage.',
-                      'Avoid unnecessary leaf wetness (e.g. overhead irrigation).',
-                      'Follow recommended crop management guidance.'
-                    ]).map((step, idx) => (
-                      <div key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
-                        <span
-                          style={{
-                            width: '20px',
-                            height: '20px',
-                            borderRadius: '50%',
-                            backgroundColor: '#16A34A',
-                            color: '#FFFFFF',
-                            fontSize: '10px',
-                            fontWeight: '800',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            flexShrink: 0,
-                            marginTop: '2px'
-                          }}
-                        >
-                          {idx + 1}
-                        </span>
-                        <span style={{ fontSize: '12px', color: theme.textMain, lineHeight: 1.4 }}>
-                          {step}
-                        </span>
-                      </div>
-                    ))}
+                  {/* 2. Steps to Follow */}
+                  <div
+                    style={{
+                      padding: '16px',
+                      borderRadius: '10px',
+                      backgroundColor: darkMode ? '#1E293B' : '#F8FAFC',
+                      border: `1px solid ${theme.border}`
+                    }}
+                  >
+                    <div style={{ fontSize: '11px', fontWeight: '800', color: isInvalid ? '#DC2626' : '#16A34A', textTransform: 'uppercase', letterSpacing: '0.4px', marginBottom: '10px' }}>
+                      {isInvalid ? 'STEPS TO CAPTURE A PROPER PHOTO' : 'STEPS TO FOLLOW'}
+                    </div>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                      {(analysisResult.steps || [
+                        'Diagnose accurately (affected leaves and plant details).',
+                        'Keep infected plants separated where possible.',
+                        'Maintain proper field conditions and good drainage.',
+                        'Avoid unnecessary leaf wetness (e.g. overhead irrigation).',
+                        'Follow recommended crop management guidance.'
+                      ]).map((step, idx) => (
+                        <div key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                          <span
+                            style={{
+                              width: '20px',
+                              height: '20px',
+                              borderRadius: '50%',
+                              backgroundColor: isInvalid ? '#DC2626' : '#16A34A',
+                              color: '#FFFFFF',
+                              fontSize: '10px',
+                              fontWeight: '800',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              flexShrink: 0,
+                              marginTop: '2px'
+                            }}
+                          >
+                            {idx + 1}
+                          </span>
+                          <span style={{ fontSize: '12px', color: theme.textMain, lineHeight: 1.4 }}>
+                            {step}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          )}
+            );
+          })()}
         </div>
 
         {/* ========================================================
