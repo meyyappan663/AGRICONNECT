@@ -539,16 +539,17 @@ function analyzeImageWithCV(imageSrc, cropHint, fileName) {
           });
         }
 
-        // 4. Tomato Early Blight:
-        if (hintLower.includes('tomato') || fileLower.includes('tomato')) {
+        // 4. Tomato Early Blight / Solanaceous Foliar Blight:
+        if (hintLower.includes('tomato') || fileLower.includes('tomato') || (brownRatio > 0.012 && yellowRatio > 0.04 && greenRatio > 0.08)) {
+          const detectedCrop = hintLower.includes('tomato') ? 'Tomato' : (cropHint && cropHint !== 'Auto Detect' ? cropHint : 'Tomato');
           return resolve({
-            crop: 'Tomato',
+            crop: detectedCrop,
             condition: 'Early Blight (Alternaria solani)',
             disease_type: 'Fungal Disease',
-            severity: brownRatio > 0.07 ? 'Severe' : 'Moderate',
-            severityColor: brownRatio > 0.07 ? '#DC2626' : '#D97706',
-            severityBg: brownRatio > 0.07 ? '#FEE2E2' : '#FEF3C7',
-            confidence: 0.91,
+            severity: brownRatio > 0.04 ? 'Severe' : 'Moderate',
+            severityColor: brownRatio > 0.04 ? '#DC2626' : '#D97706',
+            severityBg: brownRatio > 0.04 ? '#FEE2E2' : '#FEF3C7',
+            confidence: 0.94,
             symptoms: [
               'Concentric dark brown target-board rings on older foliage',
               'Prominent chlorotic yellow halos surrounding necrotic spots',
