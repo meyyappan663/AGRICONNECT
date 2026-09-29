@@ -69,10 +69,11 @@ export default function AuthPage({ onLoginSuccess, darkMode = false, onToggleThe
     try {
       setLoading(true);
       setErrorMsg('');
+      const redirectUrl = import.meta.env.VITE_SITE_URL || window.location.origin;
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: window.location.origin
+          redirectTo: redirectUrl
         }
       });
       if (error) throw error;
@@ -87,10 +88,11 @@ export default function AuthPage({ onLoginSuccess, darkMode = false, onToggleThe
     try {
       setLoading(true);
       setErrorMsg('');
+      const redirectUrl = import.meta.env.VITE_SITE_URL || window.location.origin;
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'github',
         options: {
-          redirectTo: window.location.origin
+          redirectTo: redirectUrl
         }
       });
       if (error) throw error;
