@@ -1,0 +1,272 @@
+Column_in_Merged_Wide,Group,Unit,Source_table
+AREA_ha__Paddy_Kar,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Paddy_Samba,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Paddy_Navarai,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Paddy_Total,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Wheat_Kharif,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Wheat_Rabi,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Wheat_Total,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Jowar_Kharif,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Jowar_Rabi,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Jowar_Total,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Bajra_Kharif,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Bajra_Rabi,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Bajra_Total,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Ragi_Kharif,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Ragi_Rabi,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Ragi_Total,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Maize_Kharif,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Maize_Rabi,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Maize_Total,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Korra_Kharif,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Korra_Rabi,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Korra_Total,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Varagu_Kharif,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Varagu_Rabi,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Varagu_Total,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Samai_Kharif,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Samai_Rabi,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Samai_Total,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Kudhiraivali_Kharif,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Kudhiraivali_Rabi,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Kudhiraivali_Total,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__BengalGram_Kharif,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__BengalGram_Rabi,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__BengalGram_Total,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Redgram_Kharif,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Redgram_Rabi,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Redgram_Total,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Blackgram_Kharif,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Blackgram_Rabi,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Blackgram_Total,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Greengram_Kharif,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Greengram_Rabi,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Greengram_Total,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Horsegram_Kharif,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Horsegram_Rabi,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Horsegram_Total,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Mochai_Kharif,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Mochai_Rabi,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Mochai_Total,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Cowpea_Kharif,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Cowpea_Rabi,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Cowpea_Total,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Avarai_Kharif,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Avarai_Rabi,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Avarai_Total,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__NariPayaru_Kharif,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__NariPayaru_Rabi,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__NariPayaru_Total,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__KalPayaru_Kharif,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__KalPayaru_Rabi,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__KalPayaru_Total,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Peas_Kharif,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Peas_Rabi,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Peas_Total,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Sugarcane_Planted,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Sugarcane_Ratoon,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Sugarcane_Total,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Banana,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Mango,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Jackfruit,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Pineapple,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Guava,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Grapes,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Orange,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Lemon,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__CashewNut,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Potato_Kharif,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Potato_Rabi,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Potato_Total,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Tapioca,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__SweetPotato,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Onion_Kharif,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Onion_Rabi,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Onion_Total,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Brinjal,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__LadyFinger,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Cabbage,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Tomato,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Cotton_Total,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Groundnut_Kharif,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Groundnut_Rabi,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Groundnut_Total,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Gingelly_Kharif,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Gingelly_Rabi,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Gingelly_Total,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Sunflower_Kharif,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Sunflower_Rabi,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Sunflower_Total,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+AREA_ha__Tobacco,AREA,hectares,Table IV-A / IV-B Area under Food / Non-food crops 2024-25
+YIELD__Rice_Kar,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Rice_Samba,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Rice_Navarai,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Rice_Combined,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Jowar_Kharif,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Jowar_Rabi,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Jowar_Combined,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Bajra_Kharif,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Bajra_Rabi,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Bajra_Combined,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Ragi_Kharif,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Ragi_Rabi,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Ragi_Combined,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Maize_Kharif,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Maize_Rabi,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Korra,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Varagu_Kharif,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Varagu_Rabi,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Varagu_Combined,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Maize_Combined,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Samai_Kharif,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Samai_Rabi,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Samai_Combined,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__OtherCereals,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__BengalGram,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Redgram_Kharif,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Redgram_Rabi,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Redgram_Combined,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Greengram_Kharif,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Greengram_Rabi,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Greengram_Combined,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Blackgram_Kharif,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Blackgram_Rabi,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Blackgram_Combined,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Horsegram_Kharif,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Horsegram_Rabi,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Horsegram_Combined,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Cowpea_Kharif,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Cowpea_Rabi,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Cowpea_Combined,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__OtherPulses_Kharif,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__OtherPulses_Rabi,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__OtherPulses_Combined,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Sugarcane_t_per_ha,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Arecanut,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Chillies,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Cloves,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Garlic,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Pepper,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Ginger,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Turmeric,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Coriander,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Cardamom,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Tamarind,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Tapioca,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__SweetPotato,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Potato_Kharif,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Potato_Rabi,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Potato_Combined,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Onion_Kharif,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Onion_Rabi,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Onion_Combined,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Brinjal,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__LadyFinger,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Cabbage,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Tomato,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Banana,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Mango,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Lemon,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Orange,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__CashewNut,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Jackfruit,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Pineapple,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Guava,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Grapes,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Groundnut_Kharif,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Groundnut_Rabi,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Groundnut_Combined,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Gingelly_Kharif,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Gingelly_Rabi,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Gingelly_Combined,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Sunflower_Kharif,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Sunflower_Rabi,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Sunflower_Combined,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Rapeseed_Mustard,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Castor,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Cotton_Kharif,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Cotton_Rabi,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Cotton_Combined,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Tobacco,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+YIELD__Coconut_nuts_per_ha,YIELD,kg/ha (Sugarcane: tonnes/ha; Coconut: nuts/ha),Table V-A Average yield rates 2024-25
+PROD__Rice_Kar,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__Rice_Samba,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__Rice_Navarai,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__Rice_Total,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__Maize_Kharif,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__Maize_Rabi,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__Maize_Total,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__Jowar_Kharif,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__Jowar_Rabi,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__Jowar_Total,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__Bajra_Rabi,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__Bajra_Total,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__Bajra_Kharif,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__Ragi_Kharif,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__Ragi_Rabi,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__Ragi_Total,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__Korra,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__Varagu_Kharif,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__Varagu_Rabi,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__Varagu_Total,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__Samai_Kharif,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__Samai_Total,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__OtherCereals_Kharif,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__OtherCereals_Rabi,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__OtherCereals_Total,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__TOTAL_CEREALS,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__Samai_Rabi,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__Redgram_Kharif,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__Redgram_Rabi,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__Redgram_Total,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__Greengram_Kharif,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__Greengram_Rabi,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__Greengram_Total,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__Blackgram_Kharif,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__Blackgram_Rabi,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__Blackgram_Total,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__Horsegram_Kharif,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__Horsegram_Rabi,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__Horsegram_Total,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__BengalGram,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__Cowpea_Kharif,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__Cowpea_Rabi,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__Cowpea_Total,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__OtherPulses_Kharif,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__OtherPulses_Rabi,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__OtherPulses_Total,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__TOTAL_PULSES,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__TOTAL_FOODGRAINS,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__Sugarcane_tonnes,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__Arecanut,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__Chillies,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__Cloves,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__Garlic,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__Pepper,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__Ginger,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__Turmeric,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__Coriander,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__Cardamom,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__Tamarind,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__Tapioca,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__SweetPotato,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__Potato_Kharif,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__Potato_Rabi,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__Potato_Total,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__Onion_Kharif,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__Onion_Rabi,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__Onion_Total,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__Brinjal,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__LadyFinger,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__Cabbage,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__Tomato,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__Banana,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__Mango,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__Lemon,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__Orange,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__CashewNut,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__Jackfruit,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__Pineapple,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__Guava,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD__Grapes,PROD,tonnes (Cotton: bales of 170 kg lint; Coconut: lakh nuts; Sugarcane: tonnes of cane),Table V-B Production of crops 2024-25
+PROD

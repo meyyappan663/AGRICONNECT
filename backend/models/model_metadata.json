@@ -1,0 +1,220 @@
+{
+  "dataset_info": {
+    "source": "Government Agronomic Criteria (ICAR & TNAU Benchmarks)",
+    "region": "Cauvery Delta Zone, Tamil Nadu",
+    "total_records": 5000,
+    "years_covered": [
+      2021,
+      2022,
+      2023,
+      2024,
+      2025,
+      2026
+    ],
+    "framework": "Multi-Output Random Forest Regressor"
+  },
+  "features": [
+    "district",
+    "soil_type",
+    "crop_type",
+    "season",
+    "cultivated_area_ha",
+    "avg_temperature_c",
+    "humidity_percent",
+    "rainfall_mm",
+    "month"
+  ],
+  "targets": [
+    "seed_demand_kg",
+    "urea_demand_kg",
+    "dap_demand_kg",
+    "potash_demand_kg",
+    "pesticide_demand_l"
+  ],
+  "categorical_features": [
+    "district",
+    "soil_type",
+    "crop_type",
+    "season"
+  ],
+  "numeric_features": [
+    "cultivated_area_ha",
+    "avg_temperature_c",
+    "humidity_percent",
+    "rainfall_mm",
+    "month"
+  ],
+  "feature_importances": [
+    {
+      "feature": "cultivated_area_ha",
+      "importance": 0.4875,
+      "percentage": 48.75
+    },
+    {
+      "feature": "crop_type_Sugarcane",
+      "importance": 0.3303,
+      "percentage": 33.03
+    },
+    {
+      "feature": "crop_type_Pulses (Blackgram/Greengram)",
+      "importance": 0.0641,
+      "percentage": 6.41
+    },
+    {
+      "feature": "crop_type_Groundnut",
+      "importance": 0.0342,
+      "percentage": 3.42
+    },
+    {
+      "feature": "crop_type_Cotton",
+      "importance": 0.029,
+      "percentage": 2.9
+    },
+    {
+      "feature": "crop_type_Paddy (Rice)",
+      "importance": 0.0157,
+      "percentage": 1.57
+    },
+    {
+      "feature": "rainfall_mm",
+      "importance": 0.0152,
+      "percentage": 1.52
+    },
+    {
+      "feature": "crop_type_Maize",
+      "importance": 0.0113,
+      "percentage": 1.13
+    },
+    {
+      "feature": "humidity_percent",
+      "importance": 0.0104,
+      "percentage": 1.04
+    },
+    {
+      "feature": "avg_temperature_c",
+      "importance": 0.0007,
+      "percentage": 0.07
+    },
+    {
+      "feature": "month",
+      "importance": 0.0006,
+      "percentage": 0.06
+    },
+    {
+      "feature": "district_Perambalur",
+      "importance": 0.0001,
+      "percentage": 0.01
+    }
+  ],
+  "crop_agronomic_benchmarks": {
+    "Paddy (Rice)": {
+      "avg_seed_kg_per_ha": 40.2,
+      "avg_urea_kg_per_ha": 235.1,
+      "avg_dap_kg_per_ha": 117.3,
+      "avg_potash_kg_per_ha": 84.7,
+      "avg_pesticide_l_per_ha": 3.33,
+      "total_records": 793
+    },
+    "Sugarcane": {
+      "avg_seed_kg_per_ha": 351.8,
+      "avg_urea_kg_per_ha": 479.0,
+      "avg_dap_kg_per_ha": 159.6,
+      "avg_potash_kg_per_ha": 199.5,
+      "avg_pesticide_l_per_ha": 4.81,
+      "total_records": 825
+    },
+    "Maize": {
+      "avg_seed_kg_per_ha": 18.1,
+      "avg_urea_kg_per_ha": 266.8,
+      "avg_dap_kg_per_ha": 138.4,
+      "avg_potash_kg_per_ha": 74.6,
+      "avg_pesticide_l_per_ha": 2.41,
+      "total_records": 866
+    },
+    "Groundnut": {
+      "avg_seed_kg_per_ha": 125.5,
+      "avg_urea_kg_per_ha": 47.8,
+      "avg_dap_kg_per_ha": 95.3,
+      "avg_potash_kg_per_ha": 74.7,
+      "avg_pesticide_l_per_ha": 1.91,
+      "total_records": 794
+    },
+    "Cotton": {
+      "avg_seed_kg_per_ha": 3.0,
+      "avg_urea_kg_per_ha": 170.1,
+      "avg_dap_kg_per_ha": 95.3,
+      "avg_potash_kg_per_ha": 64.6,
+      "avg_pesticide_l_per_ha": 4.26,
+      "total_records": 820
+    },
+    "Pulses (Blackgram/Greengram)": {
+      "avg_seed_kg_per_ha": 20.1,
+      "avg_urea_kg_per_ha": 26.6,
+      "avg_dap_kg_per_ha": 52.8,
+      "avg_potash_kg_per_ha": 24.8,
+      "avg_pesticide_l_per_ha": 1.42,
+      "total_records": 902
+    }
+  },
+  "metrics": {
+    "r2": {
+      "seed_demand_kg": 0.9987,
+      "urea_demand_kg": 0.995,
+      "dap_demand_kg": 0.9966,
+      "potash_demand_kg": 0.9952,
+      "pesticide_demand_l": 0.9822
+    },
+    "mape_percent": {
+      "seed_demand_kg": 2.58,
+      "urea_demand_kg": 4.57,
+      "dap_demand_kg": 3.28,
+      "potash_demand_kg": 4.2,
+      "pesticide_demand_l": 7.88
+    }
+  },
+  "districts": [
+    "Karur",
+    "Madurai",
+    "Nagapattinam",
+    "Perambalur",
+    "Pudukkottai",
+    "Thanjavur",
+    "Tiruchirappalli",
+    "Tiruvarur"
+  ],
+  "crops": [
+    "Cotton",
+    "Groundnut",
+    "Maize",
+    "Paddy (Rice)",
+    "Pulses (Blackgram/Greengram)",
+    "Sugarcane"
+  ],
+  "seasons": [
+    "Adipattam (Jul-Aug)",
+    "Chithirai Pattam (Apr-May)",
+    "Early (Dec-Jan)",
+    "Kharif (Jun-Sep)",
+    "Kuruvai (Jun-Sep)",
+    "Late (Apr-May)",
+    "Mid (Feb-Mar)",
+    "Navarai (Dec-Mar)",
+    "Rabi (Oct-Jan)",
+    "Rainfed (Oct-Nov)",
+    "Rice Fallow (Jan-Feb)",
+    "Samba/Thaladi (Aug-Jan)",
+    "Summer Irrigated (Feb-Jul)",
+    "Thai Pattam (Dec-Jan)",
+    "Winter Irrigated (Aug-Feb)"
+  ],
+  "soil_types": [
+    "Alluvial Clay & Red Loam",
+    "Black Cotton Soil",
+    "Cauvery Delta Alluvium",
+    "Clayey Red Loam",
+    "Coastal Alluvium & Saline",
+    "Deltaic Alluvium",
+    "Red Laterite & Gravelly",
+    "Red Sandy & Black Clay"
+  ]
+}

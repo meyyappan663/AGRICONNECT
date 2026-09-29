@@ -1,0 +1,16 @@
+Item,Details
+Title,"Tamil Nadu district-wise agricultural dataset, Season and Crop Report 2024-25 (Hackwell 2.0, Team Hack Dude, PLI-09)"
+Data type,OFFICIAL government data extracted from the PDF tables you uploaded. Nothing here is synthetic.
+Year,2024-25 ONLY (single year). For time-series ML you still need earlier years of the same report.
+Coverage,All 38 districts of Tamil Nadu (report order). Mayiladuthurai has blank sowing/harvest season entries in the report itself.
+Source,"Season and Crop Report 2024-25, Dept. of Economics and Statistics, Govt. of Tamil Nadu; rainfall from IMD Chennai"
+Merged_Wide,"One row per district, all cleaned variables side by side with prefixes AREA_ha / YIELD / PROD / RAIN / RETAIL / WHOLESALE"
+Area_Clean,"Area (total, ha) for ~99 crop variables that could be mapped and cross-checked against yield x production"
+Area_Raw,Area for ALL pages of IV-A and IV-B (long format). Group labels were auto-extracted from headers and may be garbled for some crops. Use Page number to check the PDF. Only Area_Clean crops are verified.
+Sowing_Harvest_Season,Table X: peak sowing and harvesting months per crop (text)
+Missing values,Empty = cell blank in the report or no transaction (NT) in price tables
+Blank vs zero,Yield/production zeros are printed zeros in the report; blank cells stay empty
+NT in prices,NT (No Transaction) in price tables is stored as empty
+Known source-report issues,"(1) Table V-B Other Pulses columns look shifted in the report (values equal to arecanut yield), so TOTAL_PULSES / TOTAL_FOODGRAINS do not match district sums. (2) Coconut and CashewNut district sums differ from the STATE row. Use with care."
+Validation,See Validation_Production (district sum vs STATE row) and Validation_Area (area x yield / production ~ 1.0)
+NOT in report,"Fertilizer, seed and pesticide demand, warehouse stock and road distances are NOT in this report. Need Agriculture Dept / fertilizer consumption data."
